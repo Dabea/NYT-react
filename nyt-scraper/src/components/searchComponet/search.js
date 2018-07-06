@@ -9,7 +9,20 @@ class Search extends Component {
         searchTopic: "test",
         startYear: "",
         endYear: "",
-        storyies: []
+        storyies: [],
+        savedStories: [
+            { headline: "My saved story" , savedDate: "10/28/2010"},
+            { headline: "Another saved story" , savedDate: "10/28/2010" } 
+        ]
+    }
+
+    removeStory = (index) => {
+        console.log("removed");
+        this.setState(  {
+            savedStories: this.state.savedStories.splice(index, 1 )
+        });
+        console.log(this.state.savedStories);
+
     }
 
     buildQueryURL = () => {
@@ -92,6 +105,15 @@ class Search extends Component {
                     </div>    
                 {this.state.storyies.map((story, i) => <div onClick={()=> alert(this.state.storyies[i].headline.kicker) } style={Mystyle} key={'story-' + i}  >{story.headline.main} <button>Save </button> </div>)}
                 </div>
+
+                <div className="panel" >
+                    <div className="panel-header" >
+                        <span> Saved Stories </span>
+                    </div>    
+                {this.state.savedStories.map((story, i) => <div style={Mystyle} key={'saved-' + i}  >{story.headline} <span>Date Saved {story.savedDate} </span> <button onClick={() =>this.removeStory(i) }>Delete </button> </div>)}
+                </div>
+
+
 
             </div>
         )
