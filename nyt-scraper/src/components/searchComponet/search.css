@@ -1,0 +1,13 @@
+.panel-header {
+    border : 1px solid #333333;
+    
+ 
+}
+
+.panel {
+    border: 1px solid #333333;
+    padding: 0;
+    width:60%;
+    margin-left:20%;
+    margin-top: 20px;
+}
