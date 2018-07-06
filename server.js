@@ -7,7 +7,7 @@ const axios = require("axios");
 
 const db = require("./models");
 const app = express();
-const PORT = 3000;
+const PORT = 3006;
 
 
 app.use(logger("dev"));
@@ -32,7 +32,7 @@ app.get("/api/articles", function(req, res){
     })
 })
 
-app.post("/api/articles", function(req, res){
+app.post("/api/stories", function(req, res){
    res.send(req.body)
     
     db.Story.create(req.body).then(function(data){
@@ -43,6 +43,29 @@ app.post("/api/articles", function(req, res){
         console.log(req.body)
         return res.json(err);
     })
+})
+
+app.get('/api/stories', function(req, res) {
+    db.Story.find({}, function(error, found) {
+        if (error) {
+          console.log(error);
+        }
+        else {
+          res.json(found);
+        }
+      });
+})
+
+app.delete('/api/stories/:id', function(req, res){
+    console.log(req.params.id)
+    db.Story.findByIdAndRemove(req.params.id, (err, todo) => {  
+        if (err) return res.status(500).send(err);
+        
+        const response = {
+            message: "Todo successfully deleted",
+        };
+        return res.status(200).send(response);
+    });
 })
 
 app.listen(PORT);

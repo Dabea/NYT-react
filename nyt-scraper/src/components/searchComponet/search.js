@@ -16,13 +16,28 @@ class Search extends Component {
         ]
     }
 
-    removeStory = (index) => {
-        console.log("removed");
-        this.setState(  {
-            savedStories: this.state.savedStories.splice(index, 1 )
-        });
-        console.log(this.state.savedStories);
+    componentDidMount() {
+            this.loadSavedStories();
+    }
 
+    loadSavedStories = () => {
+      axios.get("/api/stories").then( res => {
+          console.log(res);
+      }
+          
+      )
+    }
+
+    removeStory = (index) => {
+        if(this.state.savedStories.length === 1){
+            this.setState(  {
+                savedStories: []
+            });
+        }else {
+            this.setState(  {
+                savedStories: this.state.savedStories.splice(index, 1 )
+            });
+        }
     }
 
     buildQueryURL = () => {
@@ -110,7 +125,7 @@ class Search extends Component {
                     <div className="panel-header" >
                         <span> Saved Stories </span>
                     </div>    
-                {this.state.savedStories.map((story, i) => <div style={Mystyle} key={'saved-' + i}  >{story.headline} <span>Date Saved {story.savedDate} </span> <button onClick={() =>this.removeStory(i) }>Delete </button> </div>)}
+                {this.state.savedStories.map((story, i) => <div style={Mystyle} key={story._id}  >{story.title} <span>Date Saved {story.savedDate} </span> <button onClick={() =>this.removeStory(i) }> The Key is {i} Delete </button> </div>)}
                 </div>
 
 
