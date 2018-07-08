@@ -19,6 +19,9 @@ summary: {
 },
 dateCreated: {
     type:Date,
+},
+dateCreatedFormated: {
+    type: String,
 }
 
 });

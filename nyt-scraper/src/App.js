@@ -4,7 +4,7 @@ import './App.css';
 import Search from './components/searchComponet/search.js';
 
 class App extends Component {
-  render() {
+  render() {   
     return (
       <div className="App">
         <header className="App-header">

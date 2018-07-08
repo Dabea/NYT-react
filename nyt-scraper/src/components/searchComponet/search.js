@@ -6,71 +6,62 @@ import "./search.css";
 class Search extends Component {
 
     state = {
-        searchTopic: "test",
+        topic: "test",
         startYear: "",
         endYear: "",
         storyies: [],
-        savedStories: [
-            { headline: "My saved story" , savedDate: "10/28/2010"},
-            { headline: "Another saved story" , savedDate: "10/28/2010" } 
-        ]
+        savedStories: []
     }
 
     componentDidMount() {
-            this.loadSavedStories();
+        this.loadSavedStories();
     }
 
     loadSavedStories = () => {
-      axios.get("/api/stories").then( res => {
+        axios.get("/api/stories").then( res => {
           console.log(res);
+          this.setState({
+              savedStories: res.data
+          })
       }
-          
       )
     }
 
-    removeStory = (index) => {
-        if(this.state.savedStories.length === 1){
+    removeStory = (index, id) => {
+        axios.delete(`/api/stories/${id}`).then( (res) => {
+            this.state.savedStories.splice(index, 1 )
             this.setState(  {
-                savedStories: []
+                savedStories: this.state.savedStories
             });
-        }else {
-            this.setState(  {
-                savedStories: this.state.savedStories.splice(index, 1 )
-            });
-        }
+        });
     }
 
     buildQueryURL = () => {
         let queryURL = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
         queryURL += "?api-key=b9f91d369ff59547cd47b931d8cbc56b:0:74623931";
-
-        queryURL += "&q=" + this.state.searchTopic;
-      
-        var startYear = this.state.startYear;
-      
+        queryURL += "&q=" + this.state.topic;
+        let startYear = this.state.startYear;
         if (parseInt(startYear)) {
           queryURL += "&begin_date=" + startYear + "0101";
         }
 
-        var endYear = this.state.endYear
-      
+        let endYear = this.state.endYear
         if (parseInt(endYear)) {
           queryURL += "&end_date=" + endYear + "0101";
         }
+
         axios.get(queryURL).then(res => {
-            console.log(res.data.response.docs)
             this.setState({
                 storyies: res.data.response.docs
             });
         })
+
         return queryURL;
       };
-
-    
       
     updateInputValue = (evt)  => {
         this.setState({
-            searchTopic: evt.target.value
+            topic: evt.target.value
         });
     };
 
@@ -85,6 +76,12 @@ class Search extends Component {
             endYear: evt.target.value
         });
     };
+
+    handelChangeEvent = (event) => {
+        this.setState({
+            [event.target.name] : event.target.value
+        })
+    }
      
 
     render() {
@@ -101,15 +98,15 @@ class Search extends Component {
                     </div>    
                     <div>
                         <label> Topic </label>
-                        <input value={this.state.searchTopic} onChange={(event) =>this.updateInputValue(event)} />
+                        <input name="topic" value={this.state.topic} onChange={(event) =>this.handelChangeEvent(event)} />
                     </div>
                     <div>
                         <label> start Year </label>
-                        <input value={this.state.startYear} onChange={(event) =>this.updateInputStartYear(event)} />
+                        <input name="startYear" value={this.state.startYear} onChange={(event) =>this.handelChangeEvent(event)} />
                     </div>
                     <div>
                         <label> end Year </label>
-                        <input value={this.state.endYear} onChange={(event) =>this.updateInputEndYear(event)} />
+                        <input name="endYear" value={this.state.endYear} onChange={(event) =>this.handelChangeEvent(event)} />
                     </div>    
                     <button onClick={this.buildQueryURL}> Click me</button>
                    
@@ -118,14 +115,14 @@ class Search extends Component {
                     <div className="panel-header" >
                         <span> Results </span>
                     </div>    
-                {this.state.storyies.map((story, i) => <div onClick={()=> alert(this.state.storyies[i].headline.kicker) } style={Mystyle} key={'story-' + i}  >{story.headline.main} <button>Save </button> </div>)}
+                {this.state.storyies.map((story, i) => <div onClick={()=> alert('test') } style={Mystyle} key={'story-' + i}  >{story.headline.main} <button>Save </button> </div>)}
                 </div>
 
                 <div className="panel" >
                     <div className="panel-header" >
                         <span> Saved Stories </span>
                     </div>    
-                {this.state.savedStories.map((story, i) => <div style={Mystyle} key={story._id}  >{story.title} <span>Date Saved {story.savedDate} </span> <button onClick={() =>this.removeStory(i) }> The Key is {i} Delete </button> </div>)}
+                {this.state.savedStories.map((story, i) => <div style={Mystyle} key={story._id}  >{story.title} <span>Date Saved {story.dateCreatedFormated} </span> <button onClick={() =>this.removeStory(i, story._id) }>Delete </button> </div>)}
                 </div>
 
 

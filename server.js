@@ -35,7 +35,9 @@ app.get("/api/articles", function(req, res){
 app.post("/api/stories", function(req, res){
     const date = new Date();
     const displayDate = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`
+    const dateCreatedFormated  = displayDate;
     req.body.dateCreated = displayDate;
+    req.body.dateCreatedFormated = dateCreatedFormated;
     db.Story.create(req.body).then(function(data){
         res.send(data);
         console.log("created Entry");
@@ -71,5 +73,9 @@ app.delete('/api/stories/:id', function(req, res){
         return res.status(200).send(response);
     });
 })
+
+app.get('/api/hello', (req, res) => {
+    res.send({ express: 'Hello From Express' });
+  });
 
 app.listen(PORT);
