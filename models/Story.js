@@ -16,6 +16,9 @@ link:{
 summary: {
     type: String,
     required: true
+},
+dateCreated: {
+    type:Date,
 }
 
 });

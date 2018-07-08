@@ -15,7 +15,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json())
 app.use(express.static("public"));
 
-mongoose.connect("mongodb://localhost/nytreact");
+mongoose.connect("mongodb://localhost:27017/nytreact", { useNewUrlParser: true });
 
 
 app.get("/api/articles", function(req, res){
@@ -33,8 +33,9 @@ app.get("/api/articles", function(req, res){
 })
 
 app.post("/api/stories", function(req, res){
-   res.send(req.body)
-    
+    const date = new Date();
+    const displayDate = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`
+    req.body.dateCreated = displayDate;
     db.Story.create(req.body).then(function(data){
         res.send(data);
         console.log("created Entry");
@@ -43,6 +44,9 @@ app.post("/api/stories", function(req, res){
         console.log(req.body)
         return res.json(err);
     })
+  
+   
+    
 })
 
 app.get('/api/stories', function(req, res) {
@@ -60,9 +64,9 @@ app.delete('/api/stories/:id', function(req, res){
     console.log(req.params.id)
     db.Story.findByIdAndRemove(req.params.id, (err, todo) => {  
         if (err) return res.status(500).send(err);
-        
+
         const response = {
-            message: "Todo successfully deleted",
+            message: "Story successfully deleted",
         };
         return res.status(200).send(response);
     });
