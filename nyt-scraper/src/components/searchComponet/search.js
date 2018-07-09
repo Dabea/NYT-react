@@ -105,7 +105,7 @@ class Search extends Component {
                     <div className="panel-header" >
                         <span> Saved Stories </span>
                     </div>    
-                {this.state.savedStories.map((story, i) => <div><div style={Mystyle} key={story._id}  >{story.title} <span>Date Saved {story.dateCreatedFormated} </span> <button onClick={() =>this.removeStory(i, story._id) }>Delete </button></div> {story.notes.map((note) => {<div>  abc{note} </div>} )} </div>)}
+                {this.state.savedStories.map((story, i) => <div><div style={Mystyle} key={story._id}  >{story.title} <span>Date Saved {story.dateCreatedFormated} </span> <button onClick={() =>this.removeStory(i, story._id) }>Delete </button></div> {story.notes.map( (note) => {<div>  abc{note} </div>} )} </div>)}
                 </div>
 
 
