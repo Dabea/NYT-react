@@ -22,6 +22,9 @@ dateCreated: {
 },
 dateCreatedFormated: {
     type: String,
+},
+notes: {
+    type: Array
 }
 
 });

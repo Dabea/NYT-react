@@ -32,7 +32,10 @@ app.get("/api/articles", function(req, res){
     })
 })
 
-app.post("/api/stories", function(req, res){
+/**
+ * Create a new Entry Via a POST request
+ */
+app.post("/api/stories", function(req, res) {
     const date = new Date();
     const displayDate = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`
     const dateCreatedFormated  = displayDate;
@@ -46,11 +49,23 @@ app.post("/api/stories", function(req, res){
         console.log(req.body)
         return res.json(err);
     })
-  
-   
-    
 })
 
+app.put("/api/stories/:id", function(req, res) {
+    db.Story.findByIdAndUpdate(
+        { _id : req.params.id},
+        { $push: {notes: req.body  }},
+        function (error, success) {
+            if (error) {
+                res.send(error)
+            }
+            else { res.send(req.body)}
+        });
+})
+
+/**
+ * Get's all Stories back by get request
+ */
 app.get('/api/stories', function(req, res) {
     db.Story.find({}, function(error, found) {
         if (error) {
@@ -62,6 +77,9 @@ app.get('/api/stories', function(req, res) {
       });
 })
 
+/**
+ * Delete a Story By id Via Delete
+ */
 app.delete('/api/stories/:id', function(req, res){
     console.log(req.params.id)
     db.Story.findByIdAndRemove(req.params.id, (err, todo) => {  
@@ -73,9 +91,5 @@ app.delete('/api/stories/:id', function(req, res){
         return res.status(200).send(response);
     });
 })
-
-app.get('/api/hello', (req, res) => {
-    res.send({ express: 'Hello From Express' });
-  });
 
 app.listen(PORT);

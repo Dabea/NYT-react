@@ -51,6 +51,7 @@ class Search extends Component {
         }
 
         axios.get(queryURL).then(res => {
+            console.log(res.data.response.docs)
             this.setState({
                 storyies: res.data.response.docs
             });
@@ -58,24 +59,6 @@ class Search extends Component {
 
         return queryURL;
       };
-      
-    updateInputValue = (evt)  => {
-        this.setState({
-            topic: evt.target.value
-        });
-    };
-
-    updateInputStartYear = (evt)  => {
-        this.setState({
-            startYear: evt.target.value
-        });
-    };
-
-    updateInputEndYear = (evt)  => {
-        this.setState({
-            endYear: evt.target.value
-        });
-    };
 
     handelChangeEvent = (event) => {
         this.setState({
@@ -122,7 +105,7 @@ class Search extends Component {
                     <div className="panel-header" >
                         <span> Saved Stories </span>
                     </div>    
-                {this.state.savedStories.map((story, i) => <div style={Mystyle} key={story._id}  >{story.title} <span>Date Saved {story.dateCreatedFormated} </span> <button onClick={() =>this.removeStory(i, story._id) }>Delete </button> </div>)}
+                {this.state.savedStories.map((story, i) => <div><div style={Mystyle} key={story._id}  >{story.title} <span>Date Saved {story.dateCreatedFormated} </span> <button onClick={() =>this.removeStory(i, story._id) }>Delete </button></div> {story.notes.map((note) => {<div>  abc{note} </div>} )} </div>)}
                 </div>
 
 
