@@ -15,6 +15,9 @@ app.use(logger("dev"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json())
 app.use(express.static("public"));
+if (process.env.NODE_ENV === "production") {
+    app.use(express.static("client/build"));
+  }
 
 mongoose.connect(
     process.env.MONGODB_URI ||"mongodb://localhost:27017/nytreact",
