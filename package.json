@@ -4,8 +4,13 @@
   "description": "Scrapeing NYT app in react",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "if-env NODE_ENV=production && npm run start:prod || npm run start:dev",
+    "start:prod": "node server.js",
+    "start:dev": "concurrently \"nodemon --ignore 'client/*'\" \"npm run client\"",
+    "client": "cd nyt-scraper && npm run start",
+    "install": "cd nyt-scraper && npm install",
+    "build": "cd nyt-scraper && npm run build",
+    "heroku-postbuild": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -18,12 +23,12 @@
     "axios": "^0.16.2",
     "body-parser": "^1.18.2",
     "cheerio": "^1.0.0-rc.2",
+    "concurrently": "^3.6.0",
     "express": "^4.16.1",
     "mongoose": "^5.0.11",
     "morgan": "^1.9.0"
   },
   "bugs": {
     "url": "https://github.com/Dabea/NYT-react/issues"
-  },
-  "homepage": "https://github.com/Dabea/NYT-react#readme"
+  }
 }

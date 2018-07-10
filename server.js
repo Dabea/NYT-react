@@ -7,7 +7,7 @@ const axios = require("axios");
 
 const db = require("./models");
 const app = express();
-const PORT = 3006;
+const PORT = process.env.PORT || 3006;
 
 
 app.use(logger("dev"));
@@ -15,7 +15,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json())
 app.use(express.static("public"));
 
-mongoose.connect("mongodb://localhost:27017/nytreact", { useNewUrlParser: true });
+mongoose.connect(
+    process.env.MONGODB_URI ||"mongodb://localhost:27017/nytreact",
+     { useNewUrlParser: true }
+    );
 
 
 app.get("/api/articles", function(req, res){
