@@ -8,6 +8,7 @@ const axios = require("axios");
 const db = require("./models");
 const app = express();
 const PORT = process.env.PORT || 3006;
+const HOST=name.herokuapp.com;
 
 
 app.use(logger("dev"));
