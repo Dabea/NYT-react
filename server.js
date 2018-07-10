@@ -54,7 +54,8 @@ app.post("/api/stories", function(req, res) {
 app.put("/api/stories/:id", function(req, res) {
     db.Story.findByIdAndUpdate(
         { _id : req.params.id},
-        { $push: {notes: req.body  }},
+        { $push: {notes: req.body.notes} },
+        {safe: true, upsert: true},
         function (error, success) {
             if (error) {
                 res.send(error)

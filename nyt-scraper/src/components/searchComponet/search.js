@@ -19,7 +19,7 @@ class Search extends Component {
 
     loadSavedStories = () => {
         axios.get("/api/stories").then( res => {
-          console.log(res);
+          console.log("loaded", res.data);
           this.setState({
               savedStories: res.data
           })
@@ -35,6 +35,8 @@ class Search extends Component {
             });
         });
     }
+
+
 
     buildQueryURL = () => {
         let queryURL = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
@@ -65,8 +67,22 @@ class Search extends Component {
             [event.target.name] : event.target.value
         })
     }
-     
 
+    saveStory = (story) => {
+        axios.post('/api/stories', {title: story.headline.main , link: story.web_url, summary: story.snippet} )
+        .then(
+            this.loadSavedStories()
+        )
+    }
+
+    addNote = (id) => {
+       const note =  prompt('Please Enter your note')
+        axios.put('/api/stories/' + id , {notes: note } )
+        .then(
+            this.loadSavedStories()
+        )
+    }
+      
     render() {
         const Mystyle = {
             "border": "1px solid black",
@@ -98,14 +114,22 @@ class Search extends Component {
                     <div className="panel-header" >
                         <span> Results </span>
                     </div>    
-                {this.state.storyies.map((story, i) => <div onClick={()=> alert('test') } style={Mystyle} key={'story-' + i}  >{story.headline.main} <button>Save </button> </div>)}
+                {this.state.storyies.map((story, i) => <div style={Mystyle} key={'story-' + i}  >{story.headline.main} <button onClick={() => this.saveStory(story)} >Save</button> </div>)}
                 </div>
 
                 <div className="panel" >
                     <div className="panel-header" >
                         <span> Saved Stories </span>
                     </div>    
-                {this.state.savedStories.map((story, i) => <div><div style={Mystyle} key={story._id}  >{story.title} <span>Date Saved {story.dateCreatedFormated} </span> <button onClick={() =>this.removeStory(i, story._id) }>Delete </button></div> {story.notes.map( (note) => {<div>  abc{note} </div>} )} </div>)}
+                {this.state.savedStories.map(
+                    (story, i) => <div>
+                        <div style={Mystyle} key={story._id}>
+                             {story.title} 
+                             <span>Date Saved {story.dateCreatedFormated} </span> 
+                             <button onClick={() =>  this.addNote(story._id)} > Add note </button>
+                             <button onClick={() =>this.removeStory(i, story._id) }>Delete </button> 
+                             {story.notes.map(note => <div>  {note}  </div>)}  </div> 
+                        </div>)}
                 </div>
 
 
