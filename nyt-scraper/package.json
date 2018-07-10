@@ -11,7 +11,13 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
-  "proxy": "http://localhost:3006"
+  "proxy": "http://localhost:3006",
+  "devDependencies": {
+    "gh-pages": "^1.2.0"
+  },
+  "homepage": "http://dabea.github.io/NYT-react"
 }
