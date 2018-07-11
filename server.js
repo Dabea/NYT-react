@@ -16,11 +16,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json())
 app.use(express.static("public"));
 if (process.env.NODE_ENV === "production") {
-    app.use(express.static("client/build"));
+    app.use(express.static("nyt-scraper/build"));
   }
 
 mongoose.connect(
-    process.env.MONGODB_URI ||"mongodb://localhost:27017/nytreact",
+    process.env.MONGODB_URI || "mongodb://localhost:27017/nytreact",
      { useNewUrlParser: true }
     );
 
@@ -31,9 +31,6 @@ app.get("/api/articles", function(req, res){
         link:"my Link",
         summary: "My summary"
     }
-    db.Story.create(results).then(function(data){
-        console.log("created Entry");
-    })
     .catch(function(err) {
         return res.json(err);
     })
